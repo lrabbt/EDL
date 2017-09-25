@@ -49,14 +49,21 @@ func main() {
 ```
 
 Saída possível:
+
 direct : 0
+
 direct : 1
+
 direct : 2
+
 goroutine : 0
+
 going
+
 goroutine : 1
+
 goroutine : 2
-<enter>
+
 done
 
  **- Em C**
@@ -122,11 +129,17 @@ int main()
 Saída:
 
 direto  0
+
 direto  1
+
 direto  2
+
 nao e goroutine  0
+
 nao e goroutine  1
+
 nao e goroutine  2
+
 não é possível aninhar funcao em c ¯\_(ツ)_/¯
 
 ** - Em Python:**
@@ -180,18 +193,28 @@ indoThread.join()
 Saída:
 
 direto : 0
+
 direto : 1
+
 pythonThread : 0
+
 pythonThread : 1
+
 indo
+
 
 ou
 
 direto : 0
+
 direto : 1
+
 indo
+
 pythonThread : 0
+
 pythonThread : 1
+
 
 
 ### Channels
@@ -336,6 +359,7 @@ func main() {
 Saída:
 
 received one
+
 received two
 
  **- Em C e Python:**

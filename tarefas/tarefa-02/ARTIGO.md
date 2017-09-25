@@ -11,10 +11,10 @@ Outra característica é que o Go tem uma sintaxe consistente e que não deixass
 
 Além disso, Go é considerado “leve” em termos de uso de memória. 
 
+## Primitivas de Concorrência
+
 Concorrência é um dos fatores mais fortes da linguagem, se você precisar sobrecarregar um backend com diversos processamentos simultâneos, os goroutines, channels e select auxiliam nesta tarefa. 
 Obs: Programação concorrente aumenta o desempenho, pois aumenta-se a quantidade de tarefas sendo executadas em determinado período de tempo.
-
-## Primitivas de Concorrência
 
 ### Goroutines
 
@@ -22,10 +22,10 @@ A definição de Goroutine é bem simples: Goroutine é uma função que é capa
 
 Para executer:
 ```shell
-$ go run <Arquivo>.go
+$ go run goroutines.go
 ```
 
-Arquivo.go:
+<Arquivo>.go:
 
 package main
 
@@ -56,11 +56,10 @@ goroutine : 0
 going
 goroutine : 1
 goroutine : 2
-
+<enter>
 done
 
-#### Em C
-
+ **- Em C**
 Para executar o mesmo código em C, precisamos usar e gerenciar pthreads, o código abaixo executa uma rotina parecida com o código em go, mas executa as threads em série e não é possível criar funções aninhadas em C.
 
 Para compilar (pthread é uma biblioteca dinâmica): 
@@ -69,7 +68,7 @@ Para compilar (pthread é uma biblioteca dinâmica):
     gcc -pthread <Arquivo Fonte>.c -o <NomeDoExecutável>
 ```
 
-Arquivo Fonte.c:
+<Arquivo Fonte>.c:
 
 ```c
 #include <stdio.h>
@@ -130,7 +129,7 @@ nao e goroutine  1
 nao e goroutine  2
 não é possível aninhar funcao em c ¯\_(ツ)_/¯
 
-#### Em Python
+** - Em Python:**
 
 É possível executar threads em python do mesmo modo que em go, mas a quantidade de linhas de código é maior e é necessário criar uma classe de thread para gerenciar as threads.
 
@@ -139,7 +138,7 @@ Para executar:
 $ python <Nome do arquivo>.py
 ```
 
-Nome do arquivo.py:
+<Nome do arquivo>.py:
 
 ```python
 from threading import Thread
@@ -206,7 +205,7 @@ $ go run <Arquivo>.go
 ping
 ```
 
-Arquivo.go:
+<Arquivo>.go:
 
 ```go
 import "fmt"
@@ -224,7 +223,7 @@ Saída:
 
 ping
 
-#### Em C
+** - Em C:**
 
 Para simularmos um comportamento parecido em C, devemos usar pthread_join e uma variável passada por referência.
 
@@ -232,7 +231,7 @@ Para simularmos um comportamento parecido em C, devemos usar pthread_join e uma 
     gcc -pthread <Arquivo Fonte>.c -o <NomeDoExecutável>
 ```
 
-Arquivo Fonte.c:
+<Arquivo Fonte>.c:
 
 ```c
 #include <stdio.h>
@@ -266,7 +265,7 @@ Saída:
 
 ping
 
-#### Em Python
+** - Em Python:**
 
 Em Python, existe uma biblioteca multiprocessing que possui uma classe capaz de gerenciar processos assíncronos, por isso, para um efeito parecido com o channel do go, basta usar a classe ThreadPool.
 
@@ -275,7 +274,7 @@ Para executar:
 $ python <Nome do arquivo>.py
 ```
 
-Nome do arquivo.py:
+<Nome do arquivo>.py:
 
 ```python
 def channel():
@@ -297,15 +296,17 @@ ping
 
 ### Select
 
-O select do Go permite que você espere em múltiplos canais de operações. Combinar goroutines e canais com o select é um dos poderosos recursos da linguagem Go.
-O select é similar a um switch-case, sua função é receber ou enviar dados com múltiplos canais.
+A instrução select permite uma espera na goroutine sobre as operações de comunicação múltiplas. Combinar goroutines e canais com o select é um dos poderosos recursos da linguagem Go.
+O select é similar a um switch-case, sua função é receber ou enviar dados com múltiplos canais. 
+O bloco select aguarda até que um de seus cases possam executar, então ele executa esse case. Ele escolhe um ao acaso se vários estiverem prontos.
+
 
 Para executer:
 ```shell
 $ go run <Arquivo>.go
 ```
 
-Arquivo.go:
+<Arquivo>.go:
 ```go
 package main
 import "time"
@@ -337,7 +338,7 @@ Saída:
 received one
 received two
 
-#### Em C e Python
+ **- Em C e Python:**
 
 O comportamento do switch de concorrência é muito complexo para ser reproduzido em outras linguagens, pois não basta aguardar as threads terminarem de executar, o switch, na realidade, executa parte do código de acordo com a ordem de término das threads concorrentes, exigindo um gerenciamento enorme em outras linguagens.
 

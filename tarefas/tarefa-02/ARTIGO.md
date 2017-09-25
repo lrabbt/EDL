@@ -500,7 +500,33 @@ https://medium.com/@ViniciusPach_97728/go-composi%C3%A7%C3%A3o-vs-heran%C3%A7a-2
 
 ### Generics
 
-A linguagem go não possui Genéricos (salvo arrays, slices e maps, não é possível implementar seu próprio Genérico), pois criadores se recusam a colocar algo que complique a linguagem e o compilador, muitos usuários criticam esta decisão.
+A linguagem go não possui Genéricos (salvo arrays, slices e maps, não é possível implementar seu próprio Genérico), pois os criadores se recusam a colocar algo que complique a linguagem e o compilador, sendo uma decisão criticada por muitos usuários.
+
+Dentre os argumentos que condenam o criação de genéricos,temos os seguintes
+* Genéricos introduzem mais complexidade na tipagem do sistema, o que implica em tornar o compilador mais lento
+* Genéricos introduzem mais complexidade ao leitor do código pois se trata de outra abstração para entender.
+
+Dentre os argumentos que defendem o uso e criação de genéricos temos o seguinte
+* A ideia central de uma abstração é permitir que o usuário não se preocupe muito com o uso das mesmas, sendo os Genéricos uma forma de retirar a complexidade do código.
+
+Todos os argumentos são válidos tendo como necessidade levar em conta o nível de conhecimento do usuário(programador) à respeito das abstrações da linguagem.
+
+Exemplos dos genéricos de go:
+* Array:
+
+var a [5]int
+
+var b [5][10]int
+
+* Slices:
+
+var s []int
+
+var g []string{'g', 'o', 'l', 'a', 'n', 'g'}
+
+* Maps:
+
+var m map[“chave”]int
 
 ## Classificação
 * Imperativa:

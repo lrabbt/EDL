@@ -27,9 +27,9 @@ $ go run <Arquivo>.go
 
 Arquivo.go:
 
+```go
 package main
 
-```go
 import "fmt"
 func f(from string) {
     for i := 0; i < 3; i++ {

@@ -1,13 +1,14 @@
 # Linguagem Go/GoLang
 ## Origens e Influências
  
-Descontentes com as linguagens de programação existentes, Rob Pike, Ken Thompson e Robert Griesemer criaram a linguagem Go/Golang em 2007 como um projeto interno da Google e lançou em novembro de 2009 como um projeto de código aberto (Open Source).
+Em 2007, Rob Pike, Ken Thompson e Robert Griesemer criaram a linguagem de programação Go como um projeto interno da Google em resposta a alguns problemas enfrentados por eles durante o desenvolvimento de sistemas que trabalhassem com a sua infraestrutura. Estes problemas surgiram a partir do uso de processadores multinúcleos, sistemas distribuídos em redes, computação massiva e modelo de computação web, que apesar de tornar a computação muito mais potente, também agregou uma série de complexidades.
+Em novembro de 2009 a linguagem foi lançada como um projeto de código aberto (Open Source).
 
-Durante a experiência de 30 anos com a linguagem C criaram uma linguagem capaz de ser sua sucessora. Como o C, o Go mostra a sua força na programação do sistema, embora a linguagem possa ser implementada para praticamente qualquer finalidade.
+Durante a experiência de 30 anos com a linguagem C criaram uma linguagem capaz de ser sua sucessora. Como em C, Go mostra a sua força na programação de sistemas, embora a linguagem possa ser implementada para praticamente qualquer finalidade.
 
-O objetivo da empresa é obter uma linguagem que possa unir a velocidade de desenvolvimento de linguagens dinâmicas (como Python) com a performance e segurança de uma linguagem compilada (como C ou C++). Assim como, os inventores do Go combinaram simplicidade ( como em Python) com eficiência e confiabilidade (como em Java). Logo, a compilação não levam muito tempo como em projetos Java.
+O objetivo da empresa era obter uma linguagem que pudesse unir a velocidade de desenvolvimento  e simplicidade de linguagens dinâmicas (Python), com a performance e segurança de linguagens compiladas (C ou C++) e  com eficiência e confiabilidade de linguagens como Java.
 
-Outra característica é que o Go tem uma sintaxe consistente e que não deixasse margem para dúvidas, diferente de Perl, Ruby ou Scala que usam uma variedade de construções sintáticas ou métodos para um único e mesmo propósito.
+Outra característica era que o Go tivesse uma sintaxe consistente e que não deixasse margem para dúvidas, diferente de Perl, Ruby ou Scala que usam uma variedade de construções sintáticas ou métodos para um único e mesmo propósito.
 
 Além disso, Go é considerado “leve” em termos de uso de memória. 
 

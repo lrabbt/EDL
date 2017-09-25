@@ -515,19 +515,19 @@ Todos os argumentos são válidos tendo como necessidade levar em conta o nível
 Exemplos dos genéricos de go:
 * Array:
 
-var a [5]int
+    var a [5]int
 
-var b [5][10]int
+    var b [5][10]int
 
 * Slices:
 
-var s []int
+    var s []int
 
-var g []string{'g', 'o', 'l', 'a', 'n', 'g'}
+    var g []string{'g', 'o', 'l', 'a', 'n', 'g'}
 
 * Maps:
 
-var m map[“chave”]int
+    var m map[“chave”]int
 
 ## Classificação
 * Imperativa:

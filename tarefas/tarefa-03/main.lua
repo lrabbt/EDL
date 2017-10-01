@@ -1,14 +1,17 @@
+require "tank"
+
 function love.load()
 	love.physics.setMeter(32)
 	world = love.physics.newWorld(0, 0, true)
 
 	objects = {}
 
-	objects.tank1 = {}
-	objects.tank1.body = love.physics.newBody(world, 600/2, 600/2, "dynamic")
+	objects.tank1 = Tank
+	objects.tank1:setBody(love.physics.newBody(world, 600/2, 600/2, "dynamic"))
 	objects.tank1.body:setMass(10)
-	objects.tank1.shape = love.physics.newCircleShape(50)
-	objects.tank1.fixture = love.physics.newFixture(objects.tank1.body, objects.tank1.shape)
+	objects.tank1:setShape(love.physics.newCircleShape(50))
+	objects.tank1:setFixture(love.physics.newFixture(objects.tank1.body, objects.tank1.shape))
+	objects.tank1:setControllers("up", "down", "left", "right")
 
 	defaultlinearvelocity = 100
 
@@ -49,7 +52,8 @@ end
 function love.update(dt)
 	world:update(dt)
 
-	move(objects.tank1.body, dt, "up", "down", "left", "right")
+	--move(objects.tank1.body, dt, "up", "down", "left", "right")
+	objects.tank1:move(dt)
 end
 
 function love.draw()

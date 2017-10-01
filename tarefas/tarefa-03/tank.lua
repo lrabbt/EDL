@@ -1,5 +1,5 @@
 Tank = {
-	actualdirection = nil,
+	actualdirection = "up",
 
 	physic = {},
 
@@ -32,7 +32,8 @@ end
 --	self.fixture = fixture
 --end
 
-function Tank:move( dt )
+function Tank:readMovement( dt )
+	if self.up == nil or self.down == nil or self.left == nil or self.right == nil then return end
 	uppressed = false
 	downpressed = false
 	leftpressed = false
@@ -73,6 +74,11 @@ function Tank:move( dt )
     end
 end
 
+function Tank:readShootingState()
+	-- body
+end
+
 function Tank:update( dt )
-	self:move(dt)
+	self:readMovement(dt)
+	self:readShootingState()
 end

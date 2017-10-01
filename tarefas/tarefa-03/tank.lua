@@ -1,9 +1,7 @@
 Tank = {
 	actualdirection = nil,
 
-	body = Body,
-	shape = Shape,
-	fixture = Fixture,
+	physic = {},
 
 	up = "up",
 	down = "down",
@@ -22,17 +20,17 @@ function Tank:setDirection( actualdirection )
 	self.actualdirection = actualdirection
 end
 
-function Tank:setBody( body )
-	self.body = body
-end
-
-function Tank:setShape( shape )
-	self.shape = shape
-end
-
-function Tank:setFixture( fixture )
-	self.fixture = fixture
-end
+--function Tank:setBody( body )
+--	self.body = body
+--end
+--
+--function Tank:setShape( shape )
+--	self.shape = shape
+--end
+--
+--function Tank:setFixture( fixture )
+--	self.fixture = fixture
+--end
 
 function Tank:move( dt )
 	uppressed = false
@@ -41,17 +39,17 @@ function Tank:move( dt )
 	rightpressed = false
 	if love.keyboard.isDown(self.up) then
 		uppressed = true
-		self.body:setY(self.body:getY() - defaultlinearvelocity*dt)
+		self.physic.body:setY(self.physic.body:getY() - defaultlinearvelocity*dt)
     elseif love.keyboard.isDown(self.down) then
 		downpressed = true
-		self.body:setY(self.body:getY() + defaultlinearvelocity*dt)
+		self.physic.body:setY(self.physic.body:getY() + defaultlinearvelocity*dt)
     end
 	if love.keyboard.isDown(self.right) then
 		rightpressed = true
-		self.body:setX(self.body:getX() + defaultlinearvelocity*dt)
+		self.physic.body:setX(self.physic.body:getX() + defaultlinearvelocity*dt)
     elseif love.keyboard.isDown(self.left) then
 		leftpressed = true
-		self.body:setX(self.body:getX() - defaultlinearvelocity*dt)
+		self.physic.body:setX(self.physic.body:getX() - defaultlinearvelocity*dt)
     end
 
     if uppressed == true then
@@ -73,4 +71,8 @@ function Tank:move( dt )
     elseif leftpressed == true then
     	self.actualdirection = "left"
     end
+end
+
+function Tank:update( dt )
+	self:move(dt)
 end

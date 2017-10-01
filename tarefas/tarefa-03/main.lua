@@ -11,7 +11,7 @@ function love.load()
 	objects.tank1.physic.body:setMass(10)
 	objects.tank1.physic.shape = love.physics.newCircleShape(50)
 	objects.tank1.physic.fixture = love.physics.newFixture(objects.tank1.physic.body, objects.tank1.physic.shape)
-	objects.tank1:setControllers("up", "down", "left", "right")
+	objects.tank1:setControllers("up", "down", "left", "right", "space")
 
 	defaultlinearvelocity = 100
 
@@ -20,9 +20,7 @@ function love.load()
 end
 
 function love.keypressed(key, scancode, isrepeat)
-	if key == "space" or scancode == "space" then
-
-	end
+	
 end
 
 function love.keyreleased(key, scancode)

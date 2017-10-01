@@ -1,23 +1,35 @@
 Tank = {
 	actualdirection = "up",
+	shooting = false,
+	lastShotTime = nil,
 
 	physic = {},
 
 	up = "up",
 	down = "down",
 	left = "left",
-	right = "right"
+	right = "right",
+	space = "space"
 }
 
-function Tank:setControllers( up, down, left, right )
+function Tank:setControllers( up, down, left, right, space )
 	self.up = up
 	self.down = down
 	self.left = left
 	self.right = right
+	self.space = space
 end
 
 function Tank:setDirection( actualdirection )
 	self.actualdirection = actualdirection
+end
+
+function Tank:setShooting( shooting )
+	self.shooting = shooting
+end
+
+function Tank:isShooting()
+	return self.shooting
 end
 
 --function Tank:setBody( body )
@@ -75,7 +87,9 @@ function Tank:readMovement( dt )
 end
 
 function Tank:readShootingState()
-	-- body
+	if love.keyboard.isDown(self.space) and love.timer.getTime() - self.lastShotTime > 1 then
+		shooting = true
+    end
 end
 
 function Tank:update( dt )

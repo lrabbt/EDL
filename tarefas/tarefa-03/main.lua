@@ -39,6 +39,8 @@ function love.draw()
 	end
 end
 
+--Classes
+
 Tank = {
 	actualdirection = "up",
 	shooting = false,

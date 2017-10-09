@@ -2,9 +2,12 @@ function love.load()
 	love.physics.setMeter(32)
 	world = love.physics.newWorld(0, 0, true)
 
+	mapwidth = 600
+	mapheight = 600
+
 	tank1 = Tank:new()
 	tank1:setId("Player 1")
-	tank1:setBody(love.physics.newBody(world, 600/4, 600/4, "dynamic"))
+	tank1:setBody(love.physics.newBody(world, mapwidth/4, mapheight/4, "dynamic"))
 	tank1:getBody():setMass(10)
 	tank1:getBody():setAngle(0)
 	tank1:setShape(love.physics.newCircleShape(20))
@@ -19,7 +22,7 @@ function love.load()
 
 	tank2 = Tank:new()
 	tank2:setId("Player 2")
-	tank2:setBody(love.physics.newBody(world, 3 * 600/4, 3 * 600/4, "dynamic"))
+	tank2:setBody(love.physics.newBody(world, 3 * mapwidth/4, 3 * mapheight/4, "dynamic"))
 	tank2:getBody():setMass(10)
 	tank2:getBody():setAngle(0)
 	tank2:setShape(love.physics.newCircleShape(20))
@@ -37,7 +40,7 @@ function love.load()
 	defaultshootvelocity = 250
 
 	love.graphics.setBackgroundColor(62, 62, 62) 
-  	love.window.setMode(600, 600)
+  	love.window.setMode(mapwidth, mapheight)
 end
 
 function love.update(dt)
@@ -90,8 +93,8 @@ function love.draw()
 
 	love.graphics.print(tank1:getId(), 0, 0)
 	love.graphics.print(tank1:getPontuacao(), 0, 15)
-	love.graphics.print(tank2:getId(), 600 - 50, 0)
-	love.graphics.print(tank2:getPontuacao(), 600 - 50, 15)
+	love.graphics.print(tank2:getId(), mapwidth - 50, 0)
+	love.graphics.print(tank2:getPontuacao(), mapwidth - 50, 15)
 end
 
 --Classes
@@ -202,10 +205,15 @@ end
 
 function Tank:readMovement( dt )
 	if self.up == nil or self.down == nil or self.left == nil or self.right == nil then return end
+
 	uppressed = false
 	downpressed = false
 	leftpressed = false
 	rightpressed = false
+	
+	prevx = self.body:getX()
+	prevy = self.body:getY()
+
 	if love.keyboard.isDown(self.up) then
 		uppressed = true
 		self.body:setY(self.body:getY() - defaultlinearvelocity*dt)
@@ -213,12 +221,21 @@ function Tank:readMovement( dt )
 		downpressed = true
 		self.body:setY(self.body:getY() + defaultlinearvelocity*dt)
     end
+
+    if self.body:getY() > mapheight - self.shape:getRadius() or self.body:getY() < 0 + self.shape:getRadius() then
+    	self.body:setY(prevy)
+    end
+
 	if love.keyboard.isDown(self.right) then
 		rightpressed = true
 		self.body:setX(self.body:getX() + defaultlinearvelocity*dt)
     elseif love.keyboard.isDown(self.left) then
 		leftpressed = true
 		self.body:setX(self.body:getX() - defaultlinearvelocity*dt)
+    end
+
+    if self.body:getX() > mapwidth - self.shape:getRadius() or self.body:getX() < 0 + self.shape:getRadius() then
+    	self.body:setX(prevx)
     end
 
     if uppressed == true then

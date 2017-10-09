@@ -11,7 +11,7 @@ function love.load()
 	tank1:getBody():setMass(10)
 	tank1:getBody():setAngle(0)
 	tank1:setShape(love.physics.newCircleShape(20))
-	tank1:setFixture(love.physics.newFixture(tank1:getBody(), tank1.shape))
+	tank1:setFixture(love.physics.newFixture(tank1:getBody(), tank1:getShape()))
 	tank1:setSprite(love.graphics.newImage("sprites/tank.png"));
 	tank1.color = {}
 	tank1.color.r = 238
@@ -26,7 +26,7 @@ function love.load()
 	tank2:getBody():setMass(10)
 	tank2:getBody():setAngle(0)
 	tank2:setShape(love.physics.newCircleShape(20))
-	tank2:setFixture(love.physics.newFixture(tank2:getBody(), tank2.shape))
+	tank2:setFixture(love.physics.newFixture(tank2:getBody(), tank2:getShape()))
 	tank2:setSprite(love.graphics.newImage("sprites/tank.png"));
 	tank2.color = {}
 	tank2.color.r = 100
@@ -97,11 +97,15 @@ function love.draw()
 	love.graphics.print(tank2:getPontuacao(), mapwidth - 50, 15)
 end
 
+function distance( x1, y1, x2, y2)
+	return math.sqrt((x1 - x2)^2 + (y1 - y2)^2)
+end
+
 --Classes
 
 Tank = {
 	id = nil,
-	pontuacao = 3,
+	pontuacao = 100,
 
 	actualdirection = "up",
 	shooting = false,
@@ -195,12 +199,12 @@ function Tank:setSprite( sprite )
 	self.sprite = sprite
 end
 
-function Tank:addPontuacao()
-	self.pontuacao = self.pontuacao + 1
+function Tank:addPontuacao( valor )
+	self.pontuacao = self.pontuacao + (valor or 1)
 end
 
-function Tank:subPontuacao()
-	self.pontuacao = self.pontuacao - 1
+function Tank:subPontuacao( valor )
+	self.pontuacao = self.pontuacao - (valor or 1)
 end
 
 function Tank:readMovement( dt )
@@ -339,11 +343,28 @@ function Tank:readShootingState()
     end
 end
 
+function Tank:checkCollision()
+	self:checkBulletCollision()
+	self:checkTankCollision()
+end
+
 function Tank:checkBulletCollision()
 	for i, v in ipairs(bullets) do
-		if math.sqrt((v.x - self.body:getX())^2 + (v.y - self.body:getY())^2) < self.shape:getRadius() and v.active == true then
-			self:subPontuacao()
+		if distance(v.x, v.y, self.body:getX(), self.body:getY()) < self.shape:getRadius() and v.active == true then
 			v.active = false
+			self:subPontuacao(20)
+		end
+	end
+end
+
+function Tank:checkTankCollision()
+	if self == tank1 then
+		if distance(self.body:getX(), self.body:getY(), tank2.body:getX(), tank2.body:getY()) < self.shape:getRadius() + tank2.shape:getRadius() then
+			self:subPontuacao()
+		end
+	elseif self == tank2 then
+		if distance(self.body:getX(), self.body:getY(), tank1.body:getX(), tank1.body:getY()) < self.shape:getRadius() + tank1.shape:getRadius() then
+			self:subPontuacao()
 		end
 	end
 end
@@ -351,5 +372,5 @@ end
 function Tank:update( dt )
 	self:readMovement(dt)
 	self:readShootingState()
-	self:checkBulletCollision()
+	self:checkCollision()
 end

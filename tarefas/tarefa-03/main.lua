@@ -2,16 +2,33 @@ function love.load()
 	love.physics.setMeter(32)
 	world = love.physics.newWorld(0, 0, true)
 
-	tanks = {}
+	tank1 = Tank:new()
+	tank1:setId("p1")
+	tank1:setBody(love.physics.newBody(world, 600/4, 600/4, "dynamic"))
+	tank1:getBody():setMass(10)
+	tank1:getBody():setAngle(0)
+	tank1:setShape(love.physics.newCircleShape(20))
+	tank1:setFixture(love.physics.newFixture(tank1:getBody(), tank1.shape))
+	tank1:setSprite(love.graphics.newImage("sprites/tank.png"));
+	tank1.color = {}
+	tank1.color.r = 238
+	tank1.color.g = 238
+	tank1.color.b = 238
+	tank1:setControllers("up", "down", "left", "right", " ")
 
-	tanks.tank1 = Tank
-	tanks.tank1.physic.body = love.physics.newBody(world, 600/4, 600/4, "dynamic")
-	tanks.tank1.physic.body:setMass(10)
-	tanks.tank1.physic.body:setAngle(0)
-	tanks.tank1.physic.shape = love.physics.newCircleShape(20)
-	tanks.tank1.physic.fixture = love.physics.newFixture(tanks.tank1.physic.body, tanks.tank1.physic.shape)
-	tanks.tank1:setSprite(love.graphics.newImage("sprites/tank.png"));
-	tanks.tank1:setControllers("up", "down", "left", "right", " ")
+	tank2 = Tank:new()
+	tank2:setId("p2")
+	tank2:setBody(love.physics.newBody(world, 3 * 600/4, 3 * 600/4, "dynamic"))
+	tank2:getBody():setMass(10)
+	tank2:getBody():setAngle(0)
+	tank2:setShape(love.physics.newCircleShape(20))
+	tank2:setFixture(love.physics.newFixture(tank2:getBody(), tank2.shape))
+	tank2:setSprite(love.graphics.newImage("sprites/tank.png"));
+	tank2.color = {}
+	tank2.color.r = 100
+	tank2.color.g = 100
+	tank2.color.b = 68
+	tank2:setControllers("w", "s", "a", "d", "f")
 
 	bullets = {}
 
@@ -22,25 +39,24 @@ function love.load()
   	love.window.setMode(600, 600)
 end
 
-function love.keypressed(key, scancode, isrepeat)
-	
-end
-
-function love.keyreleased(key, scancode)
-	
-end
-
 function love.update(dt)
 	world:update(dt)
 
-	--move(tanks.tank1.body, dt, "up", "down", "left", "right")
-	tanks.tank1:update(dt)
+	tank1:update(dt)
+	tank2:update(dt)
 
-	if tanks.tank1:isShooting() then
+	if tank1:isShooting() then
 		
-		table.insert(bullets, tanks.tank1:shoot())
+		table.insert(bullets, tank1:shoot())
 
-		tanks.tank1:setShooting(false)
+		tank1:setShooting(false)
+	end
+
+	if tank2:isShooting() then
+		
+		table.insert(bullets, tank2:shoot())
+
+		tank2:setShooting(false)
 	end
 
 	for i,v in ipairs(bullets) do
@@ -50,16 +66,22 @@ function love.update(dt)
 end
 
 function love.draw()
-	if tanks.tank1.physic.body:isActive() then
-		love.graphics.setColor(238, 238, 238)
+	if tank1:getBody():isActive() then
+		love.graphics.setColor(tank1.color.r, tank1.color.g, tank1.color.b)
 		
-		--if tanks.tank1.sprite ~= nil then
+		--if tank1.sprite ~= nil then
 			--TODO: corrigir
-		--	love.graphics.draw(tanks.tank1.sprite, tanks.tank1.physic.body:getX() - tanks.tank1.physic.shape:getRadius(), tanks.tank1.physic.body:getY() - tanks.tank1.physic.shape:getRadius(), tanks.tank1.physic.body:getAngle())
+		--	love.graphics.draw(tank1.sprite, tank1.body:getX() - tank1.shape:getRadius(), tank1.body:getY() - tank1.shape:getRadius(), tank1.body:getAngle())
 		-- else
-			love.graphics.circle("fill", tanks.tank1.physic.body:getX(), tanks.tank1.physic.body:getY(), tanks.tank1.physic.shape:getRadius())
+		love.graphics.circle("fill", tank1.body:getX(), tank1.body:getY(), tank1.shape:getRadius())
 		-- end
 
+	end
+
+	if tank2:getBody():isActive() then
+		love.graphics.setColor(tank2.color.r, tank2.color.g, tank2.color.b)
+		
+		love.graphics.circle("fill", tank2.body:getX(), tank2.body:getY(), tank2.shape:getRadius())
 	end
 
 	love.graphics.setColor(240, 0, 0)
@@ -71,11 +93,16 @@ end
 --Classes
 
 Tank = {
+	id = nil,
+
 	actualdirection = "up",
 	shooting = false,
 	lastShotTime = 0,
 
-	physic = {},
+	body = nil,
+	shape = nil,
+	fixture = nil,
+
 	sprite = nil,
 
 	up = "up",
@@ -84,6 +111,45 @@ Tank = {
 	right = "right",
 	space = " "
 }
+
+function Tank:new( tank )
+	local tank = tank or {}
+	setmetatable(tank, self)
+	self.__index = self
+	return tank
+end
+
+function Tank:getId()
+	return self.id
+end
+
+function Tank:setId( id )
+	self.id = id
+end
+
+function Tank:getBody()
+	return self.body
+end
+
+function Tank:setBody( body )
+	self.body = body
+end
+
+function Tank:getShape()
+	return self.shape
+end
+
+function Tank:setShape( shape )
+	self.shape = shape
+end
+
+function Tank:getFixture()
+	return self.fixture
+end
+
+function Tank:setFixture( fixture )
+	self.fixture = fixture
+end
 
 function Tank:setControllers( up, down, left, right, space )
 	self.up = up
@@ -121,45 +187,45 @@ function Tank:readMovement( dt )
 	rightpressed = false
 	if love.keyboard.isDown(self.up) then
 		uppressed = true
-		self.physic.body:setY(self.physic.body:getY() - defaultlinearvelocity*dt)
+		self.body:setY(self.body:getY() - defaultlinearvelocity*dt)
     elseif love.keyboard.isDown(self.down) then
 		downpressed = true
-		self.physic.body:setY(self.physic.body:getY() + defaultlinearvelocity*dt)
+		self.body:setY(self.body:getY() + defaultlinearvelocity*dt)
     end
 	if love.keyboard.isDown(self.right) then
 		rightpressed = true
-		self.physic.body:setX(self.physic.body:getX() + defaultlinearvelocity*dt)
+		self.body:setX(self.body:getX() + defaultlinearvelocity*dt)
     elseif love.keyboard.isDown(self.left) then
 		leftpressed = true
-		self.physic.body:setX(self.physic.body:getX() - defaultlinearvelocity*dt)
+		self.body:setX(self.body:getX() - defaultlinearvelocity*dt)
     end
 
     if uppressed == true then
     	self.actualdirection = "up"
-    	self.physic.body:setAngle(math.rad(0))
+    	self.body:setAngle(math.rad(0))
     	if leftpressed == true then
     		self.actualdirection = "upleft"
-    		self.physic.body:setAngle(math.rad(-45))
+    		self.body:setAngle(math.rad(-45))
     	elseif rightpressed == true then
     		self.actualdirection = "upright"
-    		self.physic.body:setAngle(math.rad(45))
+    		self.body:setAngle(math.rad(45))
     	end
     elseif downpressed == true then
     	self.actualdirection = "down"
-    	self.physic.body:setAngle(math.rad(180))
+    	self.body:setAngle(math.rad(180))
     	if leftpressed == true then
     		self.actualdirection = "downleft"
-    		self.physic.body:setAngle(math.rad(-135))
+    		self.body:setAngle(math.rad(-135))
     	elseif rightpressed == true then
     		self.actualdirection = "downright"
-    		self.physic.body:setAngle(math.rad(135))
+    		self.body:setAngle(math.rad(135))
     	end
     elseif rightpressed == true then
     	self.actualdirection = "right"
-    	self.physic.body:setAngle(math.rad(90))
+    	self.body:setAngle(math.rad(90))
     elseif leftpressed == true then
     	self.actualdirection = "left"
-    	self.physic.body:setAngle(math.rad(-90))
+    	self.body:setAngle(math.rad(-90))
     end
 end
 
@@ -169,56 +235,56 @@ function Tank:shoot()
 
 	if tankdirection == "up" then
 		bulletposition.x = 0
-		bulletposition.y = - self.physic.shape:getRadius()
+		bulletposition.y = - self.shape:getRadius()
 
 		bulletposition.dx = 0
 		bulletposition.dy = - defaultshootvelocity
 	elseif tankdirection == "down" then
 		bulletposition.x = 0
-		bulletposition.y = self.physic.shape:getRadius()
+		bulletposition.y = self.shape:getRadius()
 
 		bulletposition.dx = 0
 		bulletposition.dy = defaultshootvelocity
 	elseif tankdirection == "left" then
-		bulletposition.x = - self.physic.shape:getRadius()
+		bulletposition.x = - self.shape:getRadius()
 		bulletposition.y = 0
 
 		bulletposition.dx = - defaultshootvelocity
 		bulletposition.dy = 0
 	elseif tankdirection == "right" then
-		bulletposition.x = self.physic.shape:getRadius()
+		bulletposition.x = self.shape:getRadius()
 		bulletposition.y = 0
 
 		bulletposition.dx = defaultshootvelocity
 		bulletposition.dy = 0
 	elseif tankdirection == "upleft" then
-		bulletposition.x = - self.physic.shape:getRadius()
-		bulletposition.y = - self.physic.shape:getRadius()
+		bulletposition.x = - self.shape:getRadius()
+		bulletposition.y = - self.shape:getRadius()
 
 		bulletposition.dx = - defaultshootvelocity
 		bulletposition.dy = - defaultshootvelocity
 	elseif tankdirection == "upright" then
-		bulletposition.x = self.physic.shape:getRadius()
-		bulletposition.y = - self.physic.shape:getRadius()
+		bulletposition.x = self.shape:getRadius()
+		bulletposition.y = - self.shape:getRadius()
 
 		bulletposition.dx = defaultshootvelocity
 		bulletposition.dy = - defaultshootvelocity
 	elseif tankdirection == "downleft" then
-		bulletposition.x = - self.physic.shape:getRadius()
-		bulletposition.y = self.physic.shape:getRadius()
+		bulletposition.x = - self.shape:getRadius()
+		bulletposition.y = self.shape:getRadius()
 
 		bulletposition.dx = - defaultshootvelocity
 		bulletposition.dy = defaultshootvelocity
 	elseif tankdirection == "downright" then
-		bulletposition.x = self.physic.shape:getRadius()
-		bulletposition.y = self.physic.shape:getRadius()
+		bulletposition.x = self.shape:getRadius()
+		bulletposition.y = self.shape:getRadius()
 
 		bulletposition.dx = defaultshootvelocity
 		bulletposition.dy = defaultshootvelocity
 	end
 
-	local startX = self.physic.body:getX() + bulletposition.x
-	local startY = self.physic.body:getY() + bulletposition.y
+	local startX = self.body:getX() + bulletposition.x
+	local startY = self.body:getY() + bulletposition.y
 
 	local bulletDx = bulletposition.dx
 	local bulletDy = bulletposition.dy
@@ -227,13 +293,22 @@ function Tank:shoot()
 end
 
 function Tank:readShootingState()
-	if love.keyboard.isDown(self.space) and love.timer.getTime() - self.lastShotTime > 1 then
+	if love.keyboard.isDown(self.space) and love.timer.getTime() - self.lastShotTime > 0.5 then
 		self.shooting = true
 		self.lastShotTime = love.timer.getTime()
     end
 end
 
+function Tank:checkBulletCollision()
+	for i, v in ipairs(bullets) do
+		if math.sqrt((v.x - self.body:getX())^2 + (v.y - self.body:getY())^2) < self.shape:getRadius() then
+			print(self.id)
+		end
+	end
+end
+
 function Tank:update( dt )
 	self:readMovement(dt)
 	self:readShootingState()
+	self:checkBulletCollision()
 end

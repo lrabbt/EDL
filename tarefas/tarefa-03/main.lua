@@ -3,7 +3,7 @@ function love.load()
 	world = love.physics.newWorld(0, 0, true)
 
 	tank1 = Tank:new()
-	tank1:setId("p1")
+	tank1:setId("Player 1")
 	tank1:setBody(love.physics.newBody(world, 600/4, 600/4, "dynamic"))
 	tank1:getBody():setMass(10)
 	tank1:getBody():setAngle(0)
@@ -16,8 +16,9 @@ function love.load()
 	tank1.color.b = 238
 	tank1:setControllers("up", "down", "left", "right", " ")
 
+
 	tank2 = Tank:new()
-	tank2:setId("p2")
+	tank2:setId("Player 2")
 	tank2:setBody(love.physics.newBody(world, 3 * 600/4, 3 * 600/4, "dynamic"))
 	tank2:getBody():setMass(10)
 	tank2:getBody():setAngle(0)
@@ -48,15 +49,11 @@ function love.update(dt)
 	if tank1:isShooting() then
 		
 		table.insert(bullets, tank1:shoot())
-
-		tank1:setShooting(false)
 	end
 
 	if tank2:isShooting() then
 		
 		table.insert(bullets, tank2:shoot())
-
-		tank2:setShooting(false)
 	end
 
 	for i,v in ipairs(bullets) do
@@ -86,14 +83,22 @@ function love.draw()
 
 	love.graphics.setColor(240, 0, 0)
 	for i,v in ipairs(bullets) do
-		love.graphics.circle("fill", v.x, v.y, 3)
+		if v.active == true then
+			love.graphics.circle("fill", v.x, v.y, 3)
+		end
 	end
+
+	love.graphics.print(tank1:getId(), 0, 0)
+	love.graphics.print(tank1:getPontuacao(), 0, 15)
+	love.graphics.print(tank2:getId(), 600 - 50, 0)
+	love.graphics.print(tank2:getPontuacao(), 600 - 50, 15)
 end
 
 --Classes
 
 Tank = {
 	id = nil,
+	pontuacao = 3,
 
 	actualdirection = "up",
 	shooting = false,
@@ -125,6 +130,14 @@ end
 
 function Tank:setId( id )
 	self.id = id
+end
+
+function Tank:getPontuacao()
+	return self.pontuacao
+end
+
+function Tank:setPontuacao( pontuacao )
+	self.pontuacao = pontuacao
 end
 
 function Tank:getBody()
@@ -177,6 +190,14 @@ end
 
 function Tank:setSprite( sprite )
 	self.sprite = sprite
+end
+
+function Tank:addPontuacao()
+	self.pontuacao = self.pontuacao + 1
+end
+
+function Tank:subPontuacao()
+	self.pontuacao = self.pontuacao - 1
 end
 
 function Tank:readMovement( dt )
@@ -289,7 +310,9 @@ function Tank:shoot()
 	local bulletDx = bulletposition.dx
 	local bulletDy = bulletposition.dy
 
-	return {x = startX, y = startY, dx = bulletDx, dy = bulletDy}
+	self.shooting = false
+
+	return {x = startX, y = startY, dx = bulletDx, dy = bulletDy, active = true}
 end
 
 function Tank:readShootingState()
@@ -301,8 +324,9 @@ end
 
 function Tank:checkBulletCollision()
 	for i, v in ipairs(bullets) do
-		if math.sqrt((v.x - self.body:getX())^2 + (v.y - self.body:getY())^2) < self.shape:getRadius() then
-			print(self.id)
+		if math.sqrt((v.x - self.body:getX())^2 + (v.y - self.body:getY())^2) < self.shape:getRadius() and v.active == true then
+			self:subPontuacao()
+			v.active = false
 		end
 	end
 end

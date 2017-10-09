@@ -5,6 +5,9 @@ function love.load()
 	mapwidth = 600
 	mapheight = 600
 
+	gamepaused = false
+	pausebutton = "p"
+
 	tank1 = Tank:new()
 	tank1:setId("Player 1")
 	tank1:setBody(love.physics.newBody(world, mapwidth/4, mapheight/4, "dynamic"))
@@ -12,7 +15,6 @@ function love.load()
 	tank1:getBody():setAngle(0)
 	tank1:setShape(love.physics.newCircleShape(20))
 	tank1:setFixture(love.physics.newFixture(tank1:getBody(), tank1:getShape()))
-	tank1:setSprite(love.graphics.newImage("sprites/tank.png"));
 	tank1.color = {}
 	tank1.color.r = 238
 	tank1.color.g = 238
@@ -27,7 +29,6 @@ function love.load()
 	tank2:getBody():setAngle(0)
 	tank2:setShape(love.physics.newCircleShape(20))
 	tank2:setFixture(love.physics.newFixture(tank2:getBody(), tank2:getShape()))
-	tank2:setSprite(love.graphics.newImage("sprites/tank.png"));
 	tank2.color = {}
 	tank2.color.r = 100
 	tank2.color.g = 100
@@ -43,25 +44,50 @@ function love.load()
   	love.window.setMode(mapwidth, mapheight)
 end
 
+function love.keypressed( key, scancode, isrepeat )
+	if not gameended then
+		if key == pausebutton or scancode == pausebutton then
+			gamepaused = not gamepaused
+		end
+	end
+end
+
 function love.update(dt)
-	world:update(dt)
-
-	tank1:update(dt)
-	tank2:update(dt)
-
-	if tank1:isShooting() then
-		
-		table.insert(bullets, tank1:shoot())
+	if tank1:getPontuacao() <= 0 and tank2:getPontuacao() <= 0 then
+		endgamemessage = "Empate"
+		tank1.color = {r = 255, g = 0, b = 0}
+		tank2.color = {r = 255, g = 0, b = 0}
+		gameended = true
+	elseif tank1:getPontuacao() <= 0 then
+		endgamemessage = tank2:getId() .. " venceu."
+		tank1.color = {r = 255, g = 0, b = 0}
+		gameended = true
+	elseif tank2:getPontuacao() <= 0 then
+		endgamemessage = tank1:getId() .. " venceu."
+		tank2.color = {r = 255, g = 0, b = 0}
+		gameended = true
 	end
 
-	if tank2:isShooting() then
-		
-		table.insert(bullets, tank2:shoot())
-	end
+	if not gamepaused and not gameended then
+		world:update(dt)
 
-	for i,v in ipairs(bullets) do
-		v.x = v.x + (v.dx * dt)
-		v.y = v.y + (v.dy * dt)
+		tank1:update(dt)
+		tank2:update(dt)
+
+		if tank1:isShooting() then
+			
+			table.insert(bullets, tank1:shoot())
+		end
+
+		if tank2:isShooting() then
+			
+			table.insert(bullets, tank2:shoot())
+		end
+
+		for i,v in ipairs(bullets) do
+			v.x = v.x + (v.dx * dt)
+			v.y = v.y + (v.dy * dt)
+		end
 	end
 end
 
@@ -69,12 +95,7 @@ function love.draw()
 	if tank1:getBody():isActive() then
 		love.graphics.setColor(tank1.color.r, tank1.color.g, tank1.color.b)
 		
-		--if tank1.sprite ~= nil then
-			--TODO: corrigir
-		--	love.graphics.draw(tank1.sprite, tank1.body:getX() - tank1.shape:getRadius(), tank1.body:getY() - tank1.shape:getRadius(), tank1.body:getAngle())
-		-- else
 		love.graphics.circle("fill", tank1.body:getX(), tank1.body:getY(), tank1.shape:getRadius())
-		-- end
 
 	end
 
@@ -95,6 +116,14 @@ function love.draw()
 	love.graphics.print(tank1:getPontuacao(), 0, 15)
 	love.graphics.print(tank2:getId(), mapwidth - 50, 0)
 	love.graphics.print(tank2:getPontuacao(), mapwidth - 50, 15)
+
+	if gamepaused then
+		love.graphics.print("Game Paused", mapwidth/2 - 50, mapheight/2 - 15)
+	end
+
+	if gameended then
+		love.graphics.print(endgamemessage, mapwidth/2 - 50, mapheight/2 - 15)
+	end
 end
 
 function distance( x1, y1, x2, y2)

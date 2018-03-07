@@ -35,6 +35,12 @@ function love.load()
 	tank2.color.b = 68
 	tank2:setControllers("w", "s", "a", "d", "f")
 
+-- Tarefa-07
+-- Momento: Criação do array dinâmico
+-- Este array, até então vazio, será populado dinamicamente com os tiros dos tanques. 
+-- A variável possui escopo global e existirá até o fechamento do jogo.
+-- Por possui escopo global, o array e os objetos criados podem ser acessados de qualquer
+-- parte do código.
 	bullets = {}
 
 	defaultlinearvelocity = 150
@@ -74,6 +80,14 @@ function love.update(dt)
 		tank1:update(dt)
 		tank2:update(dt)
 
+-- Tarefa-07
+-- Momento: Criação de objetos no array
+-- Os objetos são criados dinamicamente no array 'bullets' (table.insert). 
+-- Estes objetos são tiros disparados pelos tanques e cada um deles possui 
+-- uma posição e uma velocidade atribuídas a si pela função shoot().
+-- O disparo é criado, caso o botão de tiro seja pressionado e o tempo até
+-- o último disparo dado seja suficientemente grande.
+-- Cada disparo existirá até colidir com um tanque (tank).
 		if tank1:isShooting() then
 			
 			table.insert(bullets, tank1:shoot())
@@ -376,6 +390,10 @@ function Tank:checkCollision()
 end
 
 function Tank:checkBulletCollision()
+-- Tarefa-07
+-- Momento: Remoção de objeto do array
+-- Ao colidir com um tanque, o jogo calcula o dano recebido e remove o disparo do array 
+-- de tiros (table.remove).
 	for i, v in ipairs(bullets) do
 		if distance(v.x, v.y, self.body:getX(), self.body:getY()) < self.shape:getRadius() then
 			table.remove(bullets, i)

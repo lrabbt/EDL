@@ -1,11 +1,3 @@
--- Tarefa-05
--- Nome: Variáveis - "mapwidth", "mapheight", "gamepaused", "paudebutton" etc
--- Propriedade: Valor
--- Binding time: Compilação
--- Explicação: Os valores das variáveis são atribuidos em tempo de compilação.
--- As variáveis tem seu espaço alocado em tempo de compilação, pois são 
--- variáveis locais.
-
 function love.load()
 	love.physics.setMeter(32)
 	world = love.physics.newWorld(0, 0, true)
@@ -61,12 +53,6 @@ function love.keypressed( key, scancode, isrepeat )
 end
 
 function love.update(dt)
--- Nome: Palavra “if”
--- Propriedade: Semântica
--- Binding time: Design
--- Explicação: A alocação e função da palavra "if" foram definidas 
--- em tempo de design da linguagem e indica uma condição. É uma palavra 
--- reservada.
 	if tank1:getPontuacao() <= 0 and tank2:getPontuacao() <= 0 then
 		endgamemessage = "Empate"
 		tank1.color = {r = 255, g = 0, b = 0}
@@ -140,18 +126,10 @@ function love.draw()
 	end
 end
 
--- Tarefa-05
--- Nome: Operador "()"
--- Propriedade: Semântica
--- Binding time: Compile
--- Explicação: A estrutura "()" serve para indicar quais variáveis 
--- serão passadas a função quando esta for chamada. Neste caso, as 
--- quatro variáveis "x1", "y1", "x2" e "y2".
 function distance( x1, y1, x2, y2)
 	return math.sqrt((x1 - x2)^2 + (y1 - y2)^2)
 end
 
---Classes
 
 Tank = {
 	id = nil,
@@ -175,11 +153,6 @@ Tank = {
 }
 
 function Tank:new( tank )
--- Nome: Variável tank
--- Propriedade: Endereço
--- Binding time: Run
--- Explicação: O endereço da variável é alocado 
--- em tempo de execução, pois é uma variável local.
 	local tank = tank or {}
 	setmetatable(tank, self)
 	self.__index = self
@@ -260,12 +233,6 @@ end
 
 function Tank:subPontuacao( valor )
 	self.pontuacao = self.pontuacao - (valor or 1)
--- Nome: Palavra “end”
--- Propriedade: Semântica
--- Binding time: Design
--- Explicação: A alocação e função da palavra "end" foram definidas 
--- em tempo de design da linguagem e indica o final de uma estrutura. É uma palavra 
--- reservada.
 end
 
 function Tank:readMovement( dt )
@@ -280,12 +247,6 @@ function Tank:readMovement( dt )
 	prevy = self.body:getY()
 
 	if love.keyboard.isDown(self.up) then
--- Tarefa-05
--- Nome: Valor "true"
--- Propriedade: Tipo
--- Binding time: Design
--- Explicação: O tipo do valor true é boolean e foi definido em tempo de 
--- design da linguagem. É uma palavra reservada.
 		uppressed = true
 		self.body:setY(self.body:getY() - defaultlinearvelocity*dt)
     elseif love.keyboard.isDown(self.down) then

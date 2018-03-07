@@ -35,6 +35,10 @@ function love.load()
 	tank2.color.b = 68
 	tank2:setControllers("w", "s", "a", "d", "f")
 
+
+-- Tarefa-06
+-- Tipo: Array
+-- Notas: Array dinâmico para criação dos tiros usando 'table.insert' (mais abaixo).
 	bullets = {}
 
 	defaultlinearvelocity = 150
@@ -130,11 +134,17 @@ function distance( x1, y1, x2, y2)
 	return math.sqrt((x1 - x2)^2 + (y1 - y2)^2)
 end
 
-
+-- Tarefa-06
+-- Tipo: Dicionário
+-- Notas: Campos podem ser alterados por meio de funções.
 Tank = {
 	id = nil,
 	pontuacao = 100,
 
+-- Tarefa-06
+-- Tipo: Enum
+-- Notas: A variavel 'actualdirection' assume uma quantidade limitada e fixa de valores, é o mais próximo 
+-- de um enumerador que Lua possui, pois em Lua não existe o tipo 'enum'.
 	actualdirection = "up",
 	shooting = false,
 	lastShotTime = 0,

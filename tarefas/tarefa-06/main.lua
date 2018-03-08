@@ -37,6 +37,7 @@ function love.load()
 
 
 -- Tarefa-06
+-- Variável: bullets
 -- Tipo: Array
 -- Notas: Array dinâmico para criação dos tiros usando 'table.insert' (mais abaixo).
 	bullets = {}
@@ -135,13 +136,15 @@ function distance( x1, y1, x2, y2)
 end
 
 -- Tarefa-06
--- Tipo: Dicionário
--- Notas: Campos podem ser alterados por meio de funções.
+-- Variável: Tank
+-- Tipo: Registro
+-- Notas: Campos podem ser alterados por meio de funções, porém não é adicionado ou retirado nenhum campo.
 Tank = {
 	id = nil,
 	pontuacao = 100,
 
 -- Tarefa-06
+-- Variável: actualdirection
 -- Tipo: Enum
 -- Notas: A variavel 'actualdirection' assume uma quantidade limitada e fixa de valores, é o mais próximo 
 -- de um enumerador que Lua possui, pois em Lua não existe o tipo 'enum'.
@@ -310,6 +313,11 @@ function Tank:readMovement( dt )
 end
 
 function Tank:shoot()
+-- Tarefa-06
+-- Variável: bulletposition
+-- Tipo: Dicionário
+-- Notas: "bulletposition" é a variável que mais se aproxima de um dicionário, pois
+-- são criados e populados campos em tempo de execução.
 	local bulletposition = {}
 	local tankdirection = self:getDirection()
 

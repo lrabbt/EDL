@@ -394,7 +394,8 @@ function Tank:checkBulletCollision()
 -- Momento: Remoção de objeto do array
 -- Ao colidir com um tanque, o jogo calcula o dano recebido e remove o disparo do array 
 -- de tiros (table.remove).
-	for i, v in ipairs(bullets) do
+	for i = #bullets, 1, -1 do
+		v = bullets[i]
 		if distance(v.x, v.y, self.body:getX(), self.body:getY()) < self.shape:getRadius() then
 			table.remove(bullets, i)
 			self:subPontuacao(20)
